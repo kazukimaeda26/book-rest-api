@@ -17,7 +17,21 @@ public class BookInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("BookInterceptor - preHandle");
-        return HandlerInterceptor.super.preHandle(request, response, handler);
+        boolean flag = true;
+        String method = request.getMethod();
+        log.info(method);
+        if(method.equalsIgnoreCase("post") || method.equalsIgnoreCase("put")) {
+            String contentType = request.getContentType();
+            log.info(contentType);
+            if(contentType != null && !contentType.equalsIgnoreCase("application/json")) {
+                flag = false;
+            }
+        }
+        if(!flag) {
+            response.sendRedirect("/rest/books/invalid");
+        }
+        return flag;
+//        return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
     @Override

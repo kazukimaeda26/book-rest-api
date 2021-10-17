@@ -52,4 +52,10 @@ public class BookResourceImpl implements Resource<Book> {
 		return new ResponseEntity<>(bookService.deleteById(id), HttpStatus.OK);
 	}
 
+	@Override
+	public ResponseEntity<String> invalid() {
+		log.info("BookResourceImpl - invalid");
+		return new ResponseEntity<>("{'message: 'something is missing, please check everything before sending!!!'}", HttpStatus.OK);
+	}
+
 }
