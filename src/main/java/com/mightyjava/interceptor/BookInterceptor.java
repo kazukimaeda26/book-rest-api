@@ -19,11 +19,14 @@ public class BookInterceptor implements HandlerInterceptor {
         log.info("BookInterceptor - preHandle");
         boolean flag = true;
         String method = request.getMethod();
+        int contentLength = request.getContentLength();
         log.info(method);
         if(method.equalsIgnoreCase("post") || method.equalsIgnoreCase("put")) {
             String contentType = request.getContentType();
             log.info(contentType);
             if(contentType != null && !contentType.equalsIgnoreCase("application/json")) {
+                flag = false;
+            } else if(contentLength <= 2) {
                 flag = false;
             }
         }
