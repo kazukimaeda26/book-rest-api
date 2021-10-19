@@ -14,7 +14,16 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class BookExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
+    protected ResponseEntity<Object> handleExceptionInternal (Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return new ResponseEntity<>(prepareErrorJSON(status, ex), status);
+    }
+
+    @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return new ResponseEntity<>(prepareErrorJSON(status, ex), status);
+    }
+
+    private String prepareErrorJSON(HttpStatus status, Exception ex) {
         JSONObject errorJSON = new JSONObject();
         try{
             errorJSON.put("status", status.value());
@@ -23,7 +32,6 @@ public class BookExceptionHandler extends ResponseEntityExceptionHandler {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return new ResponseEntity<>(errorJSON.toString(), status);
-//        return super.handleHttpMessageNotReadable(ex, headers, status, request);
+        return errorJSON.toString();
     }
 }
