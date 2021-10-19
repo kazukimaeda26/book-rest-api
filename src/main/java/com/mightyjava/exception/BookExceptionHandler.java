@@ -19,7 +19,7 @@ public class BookExceptionHandler extends ResponseEntityExceptionHandler {
         try{
             errorJSON.put("status", status.value());
             errorJSON.put("error", status.getReasonPhrase());
-            errorJSON.put("message", ex.getMessage());
+            errorJSON.put("message", ex.getMessage().split(":")[0]);
         } catch (JSONException e) {
             e.printStackTrace();
         }
